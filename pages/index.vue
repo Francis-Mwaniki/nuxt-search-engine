@@ -136,7 +136,10 @@
           </div>
         </div>
         <div v-else>
-          <div v-show="results.length === 0" class="text-gray-300">No results found.</div>
+          <div v-if="results.length ? results.length === 0 : ''" class="text-gray-300">
+            No results found.
+          </div>
+          <div class="text-white" v-else>Nothing to show! {{ error }}</div>
           <div>
             <a
               :href="result.link"
@@ -208,9 +211,12 @@ export default {
         const response = await fetch(
           `https://search-engine-bh4i.onrender.com/api/search/?query=${this.query}`
         );
-        const data = await response.json();
-        this.results = data.results;
-        console.log(data);
+        if (response.status === 200) {
+          const data = await response.json();
+          this.results = data;
+        } else {
+          this.error = "Something went wrong";
+        }
       } catch (error) {
         this.error = error;
         this.results = [];
