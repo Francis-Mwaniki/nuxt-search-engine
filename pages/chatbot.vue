@@ -118,7 +118,7 @@
           class="max-w-2xl"
           :class="load ? 'bg-slate-500 cursor-not-allowed' : 'bg-slate-900'"
           :disabled="load"
-          :placeholder="load ? 'Please wait while it loads....' : 'Add your ingredients?'"
+          :placeholder="load ? 'Please wait while it loads....' : 'Ask Anything?'"
           id="prompt"
           v-model="prompt"
         ></textarea>
