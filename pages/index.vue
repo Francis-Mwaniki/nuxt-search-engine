@@ -71,7 +71,7 @@
           Searches offered in:
           <span class="ml-2 text-blue-700">
             <a
-              :href="`http://localhost:8000/api/search?query=${query}`"
+              :href="`https://search-engine-bh4i.onrender.com/api/search?query=${query}`"
               target="_blank"
               class="text-indigo-600 hover:underline"
               >This Api</a
@@ -202,7 +202,7 @@ export default {
           return;
         }
         const response = await fetch(
-          `http://localhost:8000/api/search/?query=${this.query}`
+          `https://search-engine-bh4i.onrender.com/api/search/?query=${this.query}`
         );
         const data = await response.json();
         this.results = data.results;
