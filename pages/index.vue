@@ -1,9 +1,10 @@
 <template>
   <div>
+    <MountLoader :mounting="mounting" />
     <div class="flex flex-col items-center justify-center">
       <div class="mb-6 flex flex-row justify-center items-center">
         <!-- francis search engine with h2 tag -->
-        <h2 class="text-3xl font-bold text-gray-300">Franc_Search</h2>
+        <h2 class="text-3xl font-bold text-gray-300 nav-font">franc_Search</h2>
         <img src="@/assets/searchr.png" alt="Logo" class="object-cover h-32 w-32" />
       </div>
       <!--   <div class="flex-none bg-gray-800 py-4 px-6 w-full mb-3">
@@ -84,7 +85,9 @@
         <!-- v-if loading skeleton loader  -->
         <div v-if="isLoading" class="text-gray-700">
           <!-- skeleton cards loaders with animate pulse -->
-          <div class="animate-pulse flex flex-row gap-x-4">
+          <div
+            class="animate-pulse flex flex-row gap-x-4 mx-auto justify-center items-center"
+          >
             <!-- div img for og_image -->
             <div class="flex-none">
               <div class="rounded-full bg-none">
@@ -186,6 +189,7 @@ export default {
       query: "",
       results: [],
       isLoading: false,
+      mounting: true,
       error: null,
       active: true,
     };
@@ -216,6 +220,7 @@ export default {
         this.isLoading = false;
       }, 2000);
     },
+
     clear() {
       this.error = null;
       this.query = "";
@@ -223,7 +228,22 @@ export default {
       this.isLoading = false;
     },
   },
+  mounted() {
+    setTimeout(() => {
+      this.mounting = false;
+    }, 3000);
+  },
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+@import url("https://fonts.googleapis.com/css2?family=Pacifico&family=Rubik:wght@600&family=Sacramento&display=swap");
+.nav-font {
+  font-family: "Pacifico", cursive;
+  font-family: "Rubik", sans-serif;
+  font-family: "Sacramento", cursive;
+  user-select: none;
+  text-underline-offset: 0.2rem;
+  text-decoration: underline;
+}
+</style>

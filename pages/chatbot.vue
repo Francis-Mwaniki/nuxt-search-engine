@@ -47,6 +47,10 @@
         </button>
       </ClientOnly>
     </div>
+
+    <div class="relative z-30">
+      <MountLoader :mounting="mounting" />
+    </div>
     <!-- end of loading -->
     <div
       class="main bg-slate-900 flex justify-center items-center mx-auto my-3 space-y-4"
@@ -56,12 +60,12 @@
         class="flex justify-center items-center gap-x-2 flex-col mt-12"
       >
         <div class="flex justify-center gap-x-2 flex-row">
-          <button class="btn-2" @click="welcome">
+          <NuxtLink to="/Welcome" class="btn-2">
             <Icon name="ic:outline-emoji-objects" class="h-6 w-6" />welcome
-          </button>
-          <button class="btn-2" @click="intro">
-            <Icon name="ic:outline-emoji-objects" class="h-6 w-6" />intro
-          </button>
+          </NuxtLink>
+          <NuxtLink to="/" class="btn-2">
+            <Icon name="uil:home" class="h-6 w-6" />Home
+          </NuxtLink>
         </div>
         <!-- welcome to Franc Chat with a smily icon about this chatbot using h2 tag-->
         <div
@@ -157,6 +161,7 @@ export default {
     let newInstructions = ref("");
     let botsvg = bott;
     let filteredData = ref([]);
+    let mounting = ref(true);
     let usersvg = user_bot;
     const bot = computed(() => {
       return botsvg;
@@ -220,7 +225,6 @@ export default {
       prompt.value = "";
     }
 
-    onMounted(() => {});
     const clear = () => {
       messages.value = [];
     };
@@ -233,6 +237,7 @@ export default {
       filteredData,
       all_instructions,
       messages,
+      mounting,
       refresh,
       isSaving,
       clear,
@@ -244,16 +249,21 @@ export default {
       handleSubmit,
     };
   },
+  mounted() {
+    setTimeout(() => {
+      this.mounting = false;
+    }, 3000);
+  },
 };
 </script>
 <style scoped>
-@import url("https://fonts.googleapis.com/css2?family=Alegreya+Sans:wght@100;300;400;500;700;800;900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Darker+Grotesque:wght@500;700&display=swap");
 
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: "Alegreya Sans", sans-serif;
+  font-family: "Darker Grotesque", sans-serif;
 }
 
 body {
