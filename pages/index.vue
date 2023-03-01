@@ -114,10 +114,11 @@
             No results found.
           </div> -->
         <div v-show="results">
-          <div
+          <a
+            :href="result.link"
             v-for="result in results.results"
             :key="result"
-            class="flex flex-row gap-x-4 mx-auto justify-center items-center hover:bg-slate-700 py-1 rounded px-2"
+            class="flex flex-row gap-x-4 mx-auto justify-center items-center hover:bg-slate-700 py-1 rounded px-2 cursor-pointer"
           >
             <!-- div img for og_image -->
             <div class="flex-none">
@@ -125,7 +126,7 @@
               <a :href="result.link" :class="active ? 'bg-blue-600' : ''">
                 <img
                   :src="result.og_image"
-                  :alt="result.title.splice(0, 10)"
+                  :alt="result.title.length ? result.title.substring(0, 10) : ''"
                   class="object-cover rounded-full md:h-16 md:w-16 h-10 w-10 text-white"
                 />
               </a>
@@ -141,7 +142,7 @@
               </p>
               <!-- splice of snippets on sm screens -->
               <p class="text-gray-300 md:text-base text-xs md:hidden block">
-                {{ result.snippet.splice(0, 30) }}...
+                {{ result.snippet.length ? result.snippet.substring(0, 30) : "" }}...
               </p>
               <a
                 :href="result.link"
@@ -149,7 +150,7 @@
                 >{{ result.link }}</a
               >
             </div>
-          </div>
+          </a>
           <!-- test results -->
         </div>
         <!-- Error alert card -->
@@ -176,6 +177,10 @@
               </svg>
             </span>
           </div>
+        </div>
+        <!-- if results length===0 -->
+        <div v-if="results.length ? results.length === 0 : ''" class="text-gray-300">
+          No results found.
         </div>
       </div>
     </div>
