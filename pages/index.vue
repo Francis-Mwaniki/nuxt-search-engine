@@ -72,7 +72,7 @@
           Searches offered in:
           <span class="ml-2 text-blue-700">
             <a
-              :href="`https://search-engine-bh4i.onrender.com/api/search?query=${query}`"
+              :href="`https://django-search-engine.vercel.app/api/search/?query=${query}/`"
               target="_blank"
               class="text-indigo-600 hover:underline"
               >This Api</a
@@ -135,13 +135,12 @@
             </span>
           </div>
         </div>
-        <div v-else>
-          <div v-if="results.length ? results.length === 0 : ''" class="text-gray-300">
+        <div>
+          <!--  <div v-if="results.length ? results.length === 0 : ''" class="text-gray-300">
             No results found.
-          </div>
-          <div class="text-white" v-else>Nothing to show! {{ error }}</div>
+          </div> -->
           <div>
-            <a
+            <div
               :href="result.link"
               v-for="result in results"
               :key="result.id"
@@ -152,8 +151,8 @@
                 <!-- on hover show visit with enclosed borders with a redirect icon -->
                 <a :href="result.link" :class="active ? 'bg-blue-600' : ''">
                   <img
-                    :src="result.og_image ? result.og_image : '@/assets/searchr.png'"
-                    :alt="result.title.slice(0, 10)"
+                    :src="result.og_image"
+                    :alt="result.title"
                     class="object-cover rounded-full md:h-16 md:w-16 h-10 w-10 text-white"
                   />
                 </a>
@@ -168,8 +167,8 @@
                   {{ result.snippet }}
                 </p>
                 <!-- splice of snippets on sm screens -->
-                <p class="text-gray-300 md:text-base text-sm md:hidden block">
-                  {{ result.snippet.slice(0, 80) }}...
+                <p class="text-gray-300 md:text-base text-xs md:hidden block">
+                  {{ result.snippet }}...
                 </p>
                 <a
                   :href="result.link"
@@ -177,7 +176,7 @@
                   >{{ result.link }}</a
                 >
               </div>
-            </a>
+            </div>
           </div>
         </div>
       </div>
@@ -209,12 +208,21 @@ export default {
           return;
         }
         const response = await fetch(
-          `https://search-engine-bh4i.onrender.com/api/search/?query=${this.query}`
+          `https://django-search-engine.vercel.app/api/search/?query=${this.query}/`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
         );
-        if (response.status === 200) {
+        if (response.ok) {
           const data = await response.json();
           this.results = data;
+          console.log(this.results);
         } else {
+          const data = await response.json();
+          console.log(data);
           this.error = "Something went wrong";
         }
       } catch (error) {
