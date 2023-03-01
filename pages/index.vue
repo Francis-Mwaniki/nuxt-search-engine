@@ -5,7 +5,7 @@
       <div class="mb-6 flex flex-row justify-center items-center">
         <!-- francis search engine with h2 tag -->
         <h2 class="text-3xl font-bold text-gray-300 nav-font">franc_Search</h2>
-        <img src="@/assets/searchr.png" alt="Logo" class="object-cover h-32 w-32" />
+        <img src="@/assets/searchr.png" alt="Logo" class="object-cover h-20 w-20" />
       </div>
       <!--   <div class="flex-none bg-gray-800 py-4 px-6 w-full mb-3">
         <div class="text-gray-300 text-lg font-semibold">My Search Engine</div>
@@ -110,6 +110,48 @@
           </div>
         </div>
 
+        <!--  <div v-if="results.length ? results.length === 0 : ''" class="text-gray-300">
+            No results found.
+          </div> -->
+        <div v-show="results">
+          <div
+            v-for="result in results.results"
+            :key="result"
+            class="flex flex-row gap-x-4 mx-auto justify-center items-center hover:bg-slate-700 py-1 rounded px-2"
+          >
+            <!-- div img for og_image -->
+            <div class="flex-none">
+              <!-- on hover show visit with enclosed borders with a redirect icon -->
+              <a :href="result.link" :class="active ? 'bg-blue-600' : ''">
+                <img
+                  :src="result.og_image"
+                  :alt="result.title.splice(0, 10)"
+                  class="object-cover rounded-full md:h-16 md:w-16 h-10 w-10 text-white"
+                />
+              </a>
+            </div>
+            <div
+              class="mb-4 flex justify-start items-start mx-auto flex-col lg:max-w-2xl"
+            >
+              <h3 class="md:text-lg text-sm font-semibold text-gray-300">
+                {{ result.title }}
+              </h3>
+              <p class="text-gray-400 md:text-base text-sm md:block hidden">
+                {{ result.snippet }}
+              </p>
+              <!-- splice of snippets on sm screens -->
+              <p class="text-gray-300 md:text-base text-xs md:hidden block">
+                {{ result.snippet.splice(0, 30) }}...
+              </p>
+              <a
+                :href="result.link"
+                class="text-indigo-600 hover:underline md:text-base text-sm"
+                >{{ result.link }}</a
+              >
+            </div>
+          </div>
+          <!-- test results -->
+        </div>
         <!-- Error alert card -->
         <div v-if="error" class="mx-4 my-2">
           <div
@@ -135,50 +177,6 @@
             </span>
           </div>
         </div>
-        <div>
-          <!--  <div v-if="results.length ? results.length === 0 : ''" class="text-gray-300">
-            No results found.
-          </div> -->
-          <div>
-            <div
-              :href="result.link"
-              v-for="result in results"
-              :key="result.id"
-              class="flex flex-row gap-x-4 mx-auto justify-center items-center hover:bg-slate-700 py-1 rounded px-2"
-            >
-              <!-- div img for og_image -->
-              <div class="flex-none">
-                <!-- on hover show visit with enclosed borders with a redirect icon -->
-                <a :href="result.link" :class="active ? 'bg-blue-600' : ''">
-                  <img
-                    :src="result.og_image"
-                    :alt="result.title"
-                    class="object-cover rounded-full md:h-16 md:w-16 h-10 w-10 text-white"
-                  />
-                </a>
-              </div>
-              <div
-                class="mb-4 flex justify-start items-start mx-auto flex-col lg:max-w-2xl"
-              >
-                <h3 class="md:text-lg text-sm font-semibold text-gray-300">
-                  {{ result.title }}
-                </h3>
-                <p class="text-gray-400 md:text-base text-sm md:block hidden">
-                  {{ result.snippet }}
-                </p>
-                <!-- splice of snippets on sm screens -->
-                <p class="text-gray-300 md:text-base text-xs md:hidden block">
-                  {{ result.snippet }}...
-                </p>
-                <a
-                  :href="result.link"
-                  class="text-indigo-600 hover:underline md:text-base text-sm"
-                  >{{ result.link }}</a
-                >
-              </div>
-            </div>
-          </div>
-        </div>
       </div>
     </div>
   </div>
@@ -191,6 +189,7 @@ export default {
       query: "",
       results: [],
       isLoading: false,
+      responses: [],
       mounting: true,
       error: null,
       active: true,
@@ -219,11 +218,12 @@ export default {
         if (response.ok) {
           const data = await response.json();
           this.results = data;
-          console.log(this.results);
+          this.responses = data;
+          console.log(this.responses);
         } else {
           const data = await response.json();
           console.log(data);
-          this.error = "Something went wrong";
+          this.error = data.details;
         }
       } catch (error) {
         this.error = error;
