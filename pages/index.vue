@@ -71,16 +71,13 @@
         <div class="text-sm text-gray-300">
           Searches offered in:
           <span class="ml-2 text-blue-700">
-            <a
-              :href="`https://django-search-engine.vercel.app/api/search/?query=${query}/`"
-              target="_blank"
-              class="text-indigo-600 hover:underline"
-              >This Api</a
-            ></span
+            <a href="https://www.google.com" target="_blank">Google</a></span
           >
           <!-- dynamic a href -blank this.query -->
         </div>
       </div>
+      <!-- if results length===0 -->
+      <div v-if="results.length === 0" class="text-gray-300">Nothing to Show!.</div>
       <div class="flex-1 p-6">
         <!-- v-if loading skeleton loader  -->
         <div v-if="isLoading" class="text-gray-700">
@@ -113,45 +110,35 @@
         <!--  <div v-if="results.length ? results.length === 0 : ''" class="text-gray-300">
             No results found.
           </div> -->
-        <div v-show="results">
-          <a
-            :href="result.link"
-            v-for="result in results.results"
-            :key="result"
-            class="flex flex-row gap-x-4 mx-auto justify-center items-center hover:bg-slate-700 py-1 rounded px-2 cursor-pointer"
-          >
-            <!-- div img for og_image -->
-            <div class="flex-none">
-              <!-- on hover show visit with enclosed borders with a redirect icon -->
-              <a :href="result.link" :class="active ? 'bg-blue-600' : ''">
-                <img
-                  :src="result.og_image"
-                  :alt="result.title.length ? result.title.substring(0, 10) : ''"
-                  class="object-cover rounded-full md:h-16 md:w-16 h-10 w-10 text-white"
-                />
-              </a>
-            </div>
-            <div
-              class="mb-4 flex justify-start items-start mx-auto flex-col lg:max-w-2xl"
+        <div class="m-4 md:m-0 max-w-xs md:max-w-6xl">
+          <div class="flex flex-col">
+            <a
+              :href="result.link"
+              v-for="result in results.results"
+              :key="result.id"
+              class="flex flex-col gap-2 p-4 hover:bg-slate-700 rounded-md"
             >
-              <h3 class="md:text-lg text-sm font-semibold text-gray-300">
-                {{ result.title }}
-              </h3>
-              <p class="text-gray-400 md:text-base text-sm md:block hidden">
-                {{ result.snippet }}
-              </p>
-              <!-- splice of snippets on sm screens -->
-              <p class="text-gray-300 md:text-base text-xs md:hidden block">
-                {{ result.snippet.length ? result.snippet.substring(0, 30) : "" }}...
-              </p>
-              <a
-                :href="result.link"
-                class="text-indigo-600 hover:underline md:text-base text-sm"
-                >{{ result.link }}</a
-              >
-            </div>
-          </a>
-          <!-- test results -->
+              <div class="flex-none">
+                <a :href="result.link">
+                  <img
+                    :src="result.og_image"
+                    class="object-cover h-24 w-full md:h-32 md:w-32 rounded-lg text-white border border-gray-500 hover:border-indigo-600"
+                  />
+                </a>
+              </div>
+              <div class="flex flex-col">
+                <h3 class="text-lg font-semibold text-gray-300">{{ result.title }}</h3>
+                <p class="text-gray-400 text-base">{{ result.snippet }}</p>
+              </div>
+              <div class="flex-none mt-2">
+                <a
+                  :href="result.link"
+                  class="text-indigo-600 hover:underline text-base flex flex-wrap"
+                  >{{ result.link.substring(0, 50) }}</a
+                >
+              </div>
+            </a>
+          </div>
         </div>
         <!-- Error alert card -->
         <div v-if="error" class="mx-4 my-2">
@@ -177,10 +164,6 @@
               </svg>
             </span>
           </div>
-        </div>
-        <!-- if results length===0 -->
-        <div v-if="results.length ? results.length === 0 : ''" class="text-gray-300">
-          No results found.
         </div>
       </div>
     </div>

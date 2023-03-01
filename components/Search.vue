@@ -1,40 +1,43 @@
 <template>
-  <div class="flex flex-col h-screen">
-    <div class="flex-none bg-gray-800 py-4 px-6">
-      <div class="text-gray-300 text-lg font-semibold">My Search Engine</div>
-    </div>
-    <div class="flex-1 bg-gray-200 flex md:flex-row flex-col">
-      <div class="flex-none bg-gray-200 w-64 py-4 px-6 border-r-2 border-indigo-600">
-        <input
-          type="text"
-          v-model="query"
-          placeholder="Search for movies, books, or products..."
-          class="block w-full rounded-md bg-white border-gray-300 shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 justify-self-stretch"
-        />
-        <button
-          class="mt-3 w-full inline-flex items-center justify-center border border-transparent rounded-md shadow-sm py-2 px-4 bg-indigo-600 text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-          @click="search"
+  <div v-show="results">
+    <a
+      :href="result.link"
+      v-for="result in results.results"
+      :key="result"
+      class="flex flex-row gap-x-4 mx-auto justify-center items-center hover:bg-slate-700 py-1 rounded px-2 cursor-pointer"
+    >
+      <!-- div img for og_image -->
+      <div class="flex-none">
+        <!-- on hover show visit with enclosed borders with a redirect icon -->
+        <a :href="result.link">
+          <img
+            :src="result.og_image"
+            class="object-cover rounded-full md:h-16 md:w-16 h-10 w-10 text-white"
+          />
+        </a>
+      </div>
+      <div class="mb-4 flex justify-start items-start mx-auto flex-col lg:max-w-2xl">
+        <h3 class="md:text-lg text-sm font-semibold text-gray-300 md:flex-none hidden">
+          {{ result.title }}
+        </h3>
+        <h3 class="md:text-lg text-sm font-semibold text-gray-300 md:hidden flex-none">
+          {{ result.title.length ? result.title.substring(0, 30) : "" }}
+        </h3>
+        <p class="text-gray-400 md:text-base text-sm md:block hidden">
+          {{ result.snippet }}
+        </p>
+        <!-- splice of snippets on sm screens -->
+        <p class="text-gray-300 md:text-base text-xs md:hidden block">
+          {{ result.snippet.length ? result.snippet.substring(0, 30) : "" }}...
+        </p>
+        <a
+          :href="result.link"
+          class="text-indigo-600 hover:underline md:text-base text-xs flex-wrap"
+          >{{ result.link }}</a
         >
-          Search
-        </button>
       </div>
-      <div class="flex-1 p-6">
-        <div v-if="isLoading" class="text-gray-700">Loading...</div>
-        <div v-else-if="error" class="text-red-500">{{ error }}</div>
-        <div v-else>
-          <div v-if="results.length === 0" class="text-gray-700">No results found.</div>
-          <div v-else>
-            <div v-for="result in results" :key="result.id" class="mb-4">
-              <h3 class="text-lg font-semibold">{{ result.title }}</h3>
-              <p class="text-gray-700">{{ result.description }}</p>
-              <a :href="result.link" class="text-indigo-600 hover:underline">{{
-                result.link
-              }}</a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+    </a>
+    <!-- test results -->
   </div>
 </template>
 
